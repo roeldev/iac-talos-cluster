@@ -1,0 +1,9 @@
+# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "Use for critical workloads like Ingress controllers, Cilium CNI and/or Metal LB to ensure they get priority scheduling, especially when mixing stable and preemptible node pools"

@@ -1,0 +1,5 @@
+*.tgz
+cilium/files
+*.md
+*.gotmpl
+*.tmpl

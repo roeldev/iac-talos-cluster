@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium-system
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/roeldev/iac-talos-cluster.git
+    targetRevision: HEAD
+    path: manifests/cilium
+  destination:
+    server: https://localhost:7445 # https://kubernetes.default.svc
+    namespace: cilium-system
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
