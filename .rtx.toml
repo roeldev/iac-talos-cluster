@@ -1,0 +1,5 @@
+[tools]
+terraform = "1.6.1"
+kubectl = "1.20.2"
+talosctl = "1.5.4"
+argocd = "2.8.2"

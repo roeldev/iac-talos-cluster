@@ -1,0 +1,7 @@
+.idea
+.development
+.terraform
+*.tfstate*
+*.tfvars
+*.tfplan
+kubeconfig.y*
