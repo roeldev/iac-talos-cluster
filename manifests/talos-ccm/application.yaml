@@ -11,7 +11,7 @@ spec:
     targetRevision: HEAD
     path: manifests/talos-ccm
   destination:
-    server: https://kubernetes.default.svc
+    server: https://localhost:7445 # https://kubernetes.default.svc
     namespace: kube-system
   syncPolicy:
     automated:
