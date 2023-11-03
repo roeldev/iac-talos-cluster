@@ -3,16 +3,18 @@ kind: Application
 metadata:
   name: metrics-server
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: default
   source:
+    path: manifests/metrics-server
     repoURL: https://github.com/roeldev/iac-talos-cluster.git
     targetRevision: HEAD
-    path: manifests/metrics-server
   destination:
-    server: https://localhost:7445 # https://kubernetes.default.svc
     namespace: kube-system
+    server: https://localhost:7445 # https://kubernetes.default.svc
   syncPolicy:
     automated:
       selfHeal: true

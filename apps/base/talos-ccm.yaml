@@ -1,21 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cilium-system
+  name: talos-ccm
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: default
   source:
+    path: manifests/talos-ccm
     repoURL: https://github.com/roeldev/iac-talos-cluster.git
     targetRevision: HEAD
-    path: manifests/cilium
   destination:
+    namespace: kube-system
     server: https://localhost:7445 # https://kubernetes.default.svc
-    namespace: cilium-system
   syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
     automated:
       selfHeal: true
-      prune: true
+      prune: false
