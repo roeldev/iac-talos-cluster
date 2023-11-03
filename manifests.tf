@@ -33,7 +33,7 @@ data "external" "kustomize_metrics-server" {
     "run",
     "${path.module}/cmd/kustomize",
     "--",
-    "${path.module}/manifests/metrics-server/base",
+    "${path.module}/manifests/metrics-server",
   ]
 }
 
