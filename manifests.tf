@@ -16,7 +16,7 @@ data "external" "kustomize_talos-ccm" {
     "run",
     "${path.module}/cmd/kustomize",
     "--",
-    "${path.module}/manifests/talos-ccm/base",
+    "${path.module}/manifests/talos-ccm",
   ]
 }
 
