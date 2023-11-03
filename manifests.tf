@@ -45,6 +45,6 @@ data "external" "kustomize_cilium" {
     "${path.module}/cmd/kustomize",
     "--",
     "--enable-helm",
-    "${path.module}/manifests/cilium/base",
+    "${path.module}/manifests/cilium",
   ]
 }
