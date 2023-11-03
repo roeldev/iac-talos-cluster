@@ -18,11 +18,11 @@ variable "talos_ccm_version" {
   default     = "1.4.0"
 }
 
-variable "talos_ccm_manifest_url" {
-  description = "Talos Cloud Controller Manager manifest to use"
+variable "argocd_version" {
+  # https://github.com/argoproj/argo-cd/releases
+  description = "ArgoCD version to use"
   type        = string
-  # % is replaced by talos_ccm_version
-  default     = "https://raw.githubusercontent.com/siderolabs/talos-cloud-controller-manager/v%/docs/deploy/cloud-controller-manager.yml"
+  default     = "2.8.6"
 }
 
 variable "metrics_server_version" {
@@ -30,11 +30,4 @@ variable "metrics_server_version" {
   description = "Kubernetes Metrics Server version to use"
   type        = string
   default     = "0.6.4"
-}
-
-variable "metrics_server_manifest_url" {
-  description = "Kubernetes Metrics Server manifest to use"
-  type        = string
-  # % is replaced by metrics_server_version
-  default     = "https://github.com/kubernetes-sigs/metrics-server/releases/download/v%/components.yaml"
 }

@@ -2,7 +2,6 @@ resource "terraform_data" "inline-manifests" {
   depends_on = [
     data.external.kustomize_talos-ccm,
     data.external.kustomize_cilium,
-    data.external.kustomize_metrics-server,
   ]
 
   input = [
@@ -16,11 +15,6 @@ resource "terraform_data" "inline-manifests" {
       name     = "cilium"
       contents = data.external.kustomize_cilium.result.manifests
     },
-#    {
-#      # optional, may be installed using argocd
-#      name     = "metrics-server"
-#      contents = data.external.kustomize_metrics-server.result.manifests
-#    },
   ]
 }
 

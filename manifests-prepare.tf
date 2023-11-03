@@ -1,6 +1,7 @@
 locals {
   talos_ccm_manifest_url = replace(var.talos_ccm_manifest_url, "%", var.talos_ccm_version)
   metrics_server_manifest_url = replace(var.metrics_server_manifest_url, "%", var.metrics_server_version)
+  argocd_manifest_url = replace(var.argocd_manifest_url, "%", var.argocd_version)
 }
 
 # download and kustomize talos ccm manifests
