@@ -143,10 +143,10 @@ rollOutCiliumPods: false
 image:
   override: ~
   repository: "quay.io/cilium/cilium"
-  tag: "v1.14.2"
+  tag: "v1.14.3"
   pullPolicy: "IfNotPresent"
   # cilium-digest
-  digest: "sha256:6263f3a3d5d63b267b538298dbeb5ae87da3efacf09a2c620446c873ba807d35"
+  digest: "sha256:e5ca22526e01469f8d10c14e2339a82a13ad70d9a359b879024715540eef4ace"
   useDigest: true
 
 # -- Affinity for cilium-agent.
@@ -590,6 +590,12 @@ cni:
 # connection tracking table.
 # @default -- `"0s"`
 conntrackGCInterval: ""
+
+# -- (string) Configure the maximum frequency for the garbage collection of the
+# connection tracking table. Only affects the automatic computation for the frequency
+# and has no effect when 'conntrackGCInterval' is set. This can be set to more frequently
+# clean up unused identities created from ToFQDN policies.
+conntrackGCMaxInterval: ""
 
 # -- Configure container runtime specific integration.
 # Deprecated in favor of bpf.autoMount.enabled. To be removed in 1.15.
@@ -1104,9 +1110,9 @@ hubble:
     image:
       override: ~
       repository: "quay.io/cilium/hubble-relay"
-      tag: "v1.14.2"
+      tag: "v1.14.3"
        # hubble-relay-digest
-      digest: "sha256:a89030b31f333e8fb1c10d2473250399a1a537c27d022cd8becc1a65d1bef1d6"
+      digest: "sha256:3f5c425faca4f8a38e29d4f86db2aadd8f33c9f05debd78a2bb2a24dd9e565d8"
       useDigest: true
       pullPolicy: "IfNotPresent"
 
@@ -1326,8 +1332,8 @@ hubble:
       image:
         override: ~
         repository: "quay.io/cilium/hubble-ui-backend"
-        tag: "v0.12.0"
-        digest: "sha256:8a79a1aad4fc9c2aa2b3e4379af0af872a89fcec9d99e117188190671c66fc2e"
+        tag: "v0.12.1"
+        digest: "sha256:1f86f3400827a0451e6332262467f894eeb7caf0eb8779bd951e2caa9d027cbe"
         useDigest: true
         pullPolicy: "IfNotPresent"
 
@@ -1357,8 +1363,8 @@ hubble:
       image:
         override: ~
         repository: "quay.io/cilium/hubble-ui"
-        tag: "v0.12.0"
-        digest: "sha256:1c876cfa1d5e35bc91e1025c9314f922041592a88b03313c22c1f97a5d2ba88f"
+        tag: "v0.12.1"
+        digest: "sha256:9e5f81ee747866480ea1ac4630eb6975ff9227f9782b7c93919c081c33f38267"
         useDigest: true
         pullPolicy: "IfNotPresent"
 
@@ -1842,9 +1848,9 @@ envoy:
   image:
     override: ~
     repository: "quay.io/cilium/cilium-envoy"
-    tag: "v1.25.9-e198a2824d309024cb91fb6a984445e73033291d"
+    tag: "v1.25.10-f71a313bd0daee41470af31ce6ea20c750fe35dd"
     pullPolicy: "IfNotPresent"
-    digest: "sha256:52541e1726041b050c5d475b3c527ca4b8da487a0bbb0309f72247e8127af0ec"
+    digest: "sha256:bfa1e919ed02afc66e9ff36c1fd9148237fc8b8560a0b44d89acf144b0ffb08c"
     useDigest: true
 
   # -- Additional containers added to the cilium Envoy DaemonSet.
@@ -2088,17 +2094,27 @@ tls:
     #   -----END CERTIFICATE-----
 
 # -- Configure the encapsulation configuration for communication between nodes.
+# Deprecated in favor of tunnelProtocol and routingMode. To be removed in 1.15.
 # Possible values:
 #   - disabled
-#   - vxlan (default)
+#   - vxlan
 #   - geneve
+# @default -- `"vxlan"`
 tunnel: ""
 
 # -- Tunneling protocol to use in tunneling mode and for ad-hoc tunnels.
+# Possible values:
+#   - ""
+#   - vxlan
+#   - geneve
 # @default -- `"vxlan"`
 tunnelProtocol: ""
 
 # -- Enable native-routing mode or tunneling mode.
+# Possible values:
+#   - ""
+#   - native
+#   - tunnel
 # @default -- `"tunnel"`
 routingMode: ""
 
@@ -2229,15 +2245,15 @@ operator:
   image:
     override: ~
     repository: "quay.io/cilium/operator"
-    tag: "v1.14.2"
+    tag: "v1.14.3"
     # operator-generic-digest
-    genericDigest: "sha256:52f70250dea22e506959439a7c4ea31b10fe8375db62f5c27ab746e3a2af866d"
+    genericDigest: "sha256:c9613277b72103ed36e9c0d16b9a17cafd507461d59340e432e3e9c23468b5e2"
     # operator-azure-digest
-    azureDigest: "sha256:55bbbf853a91e9ec0944749a67f3fa313afbd6c94dc0a7e2cae986407f8a7b1f"
+    azureDigest: "sha256:b5f6b37d7c90fec6d066686d59924fb03eb39288234492526e50b46f8d1e7c28"
     # operator-aws-digest
-    awsDigest: "sha256:8d514a9eaa06b7a704d1ccead8c7e663334975e6584a815efe2b8c15244493f1"
+    awsDigest: "sha256:120a437f75bc9b06e969e5183ac36e346e5ad02e7eb144d5d14c2918f0455c63"
     # operator-alibabacloud-digest
-    alibabacloudDigest: "sha256:72b3e26735ff0e5dd5930a853607d1878c62b36e93eba9e1d83a4b9db3ea0f28"
+    alibabacloudDigest: "sha256:64fceb06c305f524a96138e7b165bdd868a4454af55210ddc5fc13de2b36f979"
     useDigest: true
     pullPolicy: "IfNotPresent"
     suffix: ""
@@ -2516,9 +2532,9 @@ preflight:
   image:
     override: ~
     repository: "quay.io/cilium/cilium"
-    tag: "v1.14.2"
+    tag: "v1.14.3"
     # cilium-digest
-    digest: "sha256:6263f3a3d5d63b267b538298dbeb5ae87da3efacf09a2c620446c873ba807d35"
+    digest: "sha256:e5ca22526e01469f8d10c14e2339a82a13ad70d9a359b879024715540eef4ace"
     useDigest: true
     pullPolicy: "IfNotPresent"
 
@@ -2666,9 +2682,9 @@ clustermesh:
     image:
       override: ~
       repository: "quay.io/cilium/clustermesh-apiserver"
-      tag: "v1.14.2"
+      tag: "v1.14.3"
       # clustermesh-apiserver-digest
-      digest: "sha256:0650beac6633a483261640b6539c9609f5a761f4ab4504fd1e6ffe7f2bb82e9a"
+      digest: "sha256:a148485acda60f5aa9fc217ed2376ed93b7de9dd90706addeb361c6df928c192"
       useDigest: true
       pullPolicy: "IfNotPresent"
 
@@ -2713,9 +2729,9 @@ clustermesh:
       image:
         override: ~
         repository: "quay.io/cilium/kvstoremesh"
-        tag: "v1.14.2"
+        tag: "v1.14.3"
         # kvstoremesh-digest
-        digest: "sha256:9c7edc95320996b409ee77691591d9213e4e9e7b900f08fbd5ed5c827d020178"
+        digest: "sha256:36d0b45c3f65ff3f391d5446b6434c5650d33576ba215a6e3159f0f8dc2ec693"
         useDigest: true
         pullPolicy: "IfNotPresent"
 

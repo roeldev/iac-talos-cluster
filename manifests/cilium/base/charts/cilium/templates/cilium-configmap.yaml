@@ -117,6 +117,10 @@ data:
   conntrack-gc-interval: {{ include "validateDuration" .Values.conntrackGCInterval | quote }}
 {{- end }}
 
+{{- if .Values.conntrackGCMaxInterval }}
+  conntrack-gc-max-interval: {{ include "validateDuration" .Values.conntrackGCMaxInterval | quote }}
+{{- end }}
+
 {{- if hasKey .Values "disableEnvoyVersionCheck" }}
   disable-envoy-version-check: {{ .Values.disableEnvoyVersionCheck | quote }}
 {{- end }}
@@ -432,36 +436,34 @@ data:
 {{- else if .Values.aksbyocni.enabled }}
   routing-mode: "tunnel"
   tunnel-protocol: "vxlan"
-{{- end }}
-
-{{- if eq .Values.tunnel "disabled" }}
+{{- else if .Values.routingMode }}
+  routing-mode: {{ .Values.routingMode | quote }}
+{{- else }}
+  {{- if eq .Values.tunnel "disabled" }}
   routing-mode: "native"
-{{- else if eq .Values.tunnel "vxlan" }}
+  {{- else if eq .Values.tunnel "vxlan" }}
   routing-mode: "tunnel"
   tunnel-protocol: "vxlan"
-{{- else if eq .Values.tunnel "geneve" }}
+  {{- else if eq .Values.tunnel "geneve" }}
   routing-mode: "tunnel"
   tunnel-protocol: "geneve"
-{{- else if not (or .Values.gke.enabled .Values.aksbyocni.enabled) }}
+  {{- else }}
   # Default case
   routing-mode: "tunnel"
   tunnel-protocol: "vxlan"
-{{- end }}
-
-{{- if .Values.routingMode }}
-  routing-mode: "{{ .Values.routingMode }}"
+  {{- end }}
 {{- end }}
 
 {{- if .Values.tunnelProtocol }}
-  tunnel-protocol: "{{ .Values.tunnelProtocol }}"
+  tunnel-protocol: {{ .Values.tunnelProtocol | quote }}
 {{- end }}
 
 {{- if .Values.tunnelPort }}
-  tunnel-port: "{{ .Values.tunnelPort }}"
+  tunnel-port: {{ .Values.tunnelPort | quote }}
 {{- end }}
 
 {{- if .Values.MTU }}
-  mtu: "{{ .Values.MTU }}"
+  mtu: {{ .Values.MTU | quote }}
 {{- end }}
 
 {{- if .Values.eni.enabled }}

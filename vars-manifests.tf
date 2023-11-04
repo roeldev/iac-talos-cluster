@@ -1,5 +1,5 @@
 variable "app_of_apps_manifest" {
-  type = string
+  type    = string
   default = "apps/application.yaml"
 }
 
