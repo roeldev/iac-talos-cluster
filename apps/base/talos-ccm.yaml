@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: manifests/talos-ccm
-    repoURL: https://github.com/roeldev/iac-talos-cluster.git
+    repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
   destination:
     namespace: kube-system
