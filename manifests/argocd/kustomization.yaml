@@ -1,3 +1,4 @@
+namespace: argocd
 resources:
   - namespace.yaml
   - argocd.yaml
