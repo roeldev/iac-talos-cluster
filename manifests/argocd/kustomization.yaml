@@ -2,4 +2,4 @@ namespace: argocd
 resources:
   - namespace.yaml
   - argocd.yaml
-  - kustomized-helm.yaml
+#  - kustomized-helm.yaml via patch
