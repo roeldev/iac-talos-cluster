@@ -1,0 +1,6 @@
+# https://medium.com/dzerolabs/turbocharge-argocd-with-app-of-apps-pattern-and-kustomized-helm-ea4993190e7c
+# Reference: https://dev.to/camptocamp-ops/use-kustomize-to-post-render-helm-charts-in-argocd-2ml6
+ # https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/
+- op: replace
+  path: /data/kustomize.buildOptions
+  value: --enable-helm

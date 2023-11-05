@@ -2,3 +2,4 @@ resources:
   - talos-ccm.yaml
   - cilium.yaml
   - metrics-server.yaml
+  - argocd.yaml

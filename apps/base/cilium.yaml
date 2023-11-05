@@ -12,8 +12,6 @@ spec:
     path: manifests/cilium
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
-    plugin:
-      name: kustomized-helm
   destination:
     server: https://kubernetes.default.svc
     namespace: cilium-system
