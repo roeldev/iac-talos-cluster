@@ -13,8 +13,8 @@ spec:
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
   destination:
+    name: in-cluster
     namespace: cilium-system
-    server: https://localhost:7445
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

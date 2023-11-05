@@ -13,5 +13,5 @@ spec:
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
   destination:
-    namespace: default
     name: in-cluster
+    namespace: default

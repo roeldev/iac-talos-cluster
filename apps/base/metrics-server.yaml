@@ -13,8 +13,8 @@ spec:
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
   destination:
+    server: https://kubernetes.default.svc
     namespace: kube-system
-    server: https://localhost:7445 # https://kubernetes.default.svc
   syncPolicy:
     automated:
       selfHeal: true
