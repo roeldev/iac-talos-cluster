@@ -9,9 +9,9 @@ metadata:
 spec:
   project: default
   source:
-    path: manifests/cilium
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
+    path: manifests/cilium
   destination:
     server: https://kubernetes.default.svc
     namespace: cilium-system

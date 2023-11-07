@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    path: apps/base
+    path: manifests/apps
     repoURL: https://github.com/roeldev/iac-talos-cluster
     targetRevision: HEAD
   destination:

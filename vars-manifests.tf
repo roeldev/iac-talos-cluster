@@ -1,6 +1,7 @@
-variable "app_of_apps_manifest" {
-  type    = string
-  default = "apps/application.yaml"
+variable "app_of_apps" {
+  description = "Apply app of apps pattern from directory using kustomize"
+  type        = set(string)
+  default     = ["manifests/apps"]
 }
 
 variable "talos_ccm_manifest_url" {

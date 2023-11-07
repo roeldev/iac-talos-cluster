@@ -4,19 +4,14 @@ resource "synclocal_url" "argocd_manifest" {
   filename = "${path.module}/manifests/argocd/argocd.yaml"
 }
 
-resource "null_resource" "apply_argocd" {
+resource "null_resource" "apply_app_of_apps" {
   depends_on = [
     data.external.talos-nodes-ready,
     synclocal_url.argocd_manifest,
   ]
-  provisioner "local-exec" {
-    command = "kubectl apply -k ${path.module}/manifests/argocd"
-  }
-}
 
-resource "null_resource" "apply_app_of_apps" {
-  depends_on = [null_resource.apply_argocd]
+  for_each = var.app_of_apps
   provisioner "local-exec" {
-    command = "kubectl apply -f ${path.module}/${var.app_of_apps_manifest}"
+    command = "kubectl kustomize --enable-helm ${path.module}/${each.value} | kubectl apply -f -"
   }
 }
