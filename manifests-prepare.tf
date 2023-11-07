@@ -23,20 +23,14 @@ data "external" "kustomize_talos-ccm" {
 
 # kustomize cilium manifests
 resource "local_file" "cilium_kustomization" {
-  filename = "${path.module}/manifests/cilium/base/kustomization.yaml.tmp"
+  filename = "${path.module}/manifests/cilium/base/kustomization.yaml"
   content  = templatefile("${path.module}/manifests/cilium/base/kustomization.yaml.tpl", {
     cilium_version = var.cilium_version
   })
 }
 
-resource "synclocal_file" "cilium_kustomization" {
-  depends_on  = [local_file.cilium_kustomization]
-  source      = "${path.module}/manifests/cilium/base/kustomization.yaml.tmp"
-  destination = "${path.module}/manifests/cilium/base/kustomization.yaml"
-}
-
 data "external" "kustomize_cilium" {
-  depends_on = [synclocal_file.cilium_kustomization]
+  depends_on = [local_file.cilium_kustomization]
   program    = [
     "go",
     "run",
