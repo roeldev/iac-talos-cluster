@@ -1,6 +1,7 @@
 machine:
   nodeLabels:
     topology.kubernetes.io/region: ${topology_region}
+    cilium/bgp-peering-policy: default
 
   kubelet:
     extraConfig:

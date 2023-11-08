@@ -21,24 +21,6 @@ variable "cluster_endpoint_port" {
   default     = 6443
 }
 
-variable "network_ip_prefix" {
-  description = "Network IP network prefix"
-  type        = number
-  default     = 24
-}
-
-variable "network_cidr" {
-  description = "Network address in CIDR notation"
-  type        = string
-  default     = "10.0.0.1/24"
-}
-
-variable "network_gateway" {
-  description = "Gateway of the network"
-  type        = string
-  default     = "10.0.0.1"
-}
-
 variable "control_plane_first_ip" {
   description = "First ip of a control-plane"
   type        = number

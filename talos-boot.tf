@@ -15,6 +15,14 @@ resource "terraform_data" "inline-manifests" {
       name     = "cilium"
       contents = data.external.kustomize_cilium.result.manifests
     },
+    {
+      name     = "cilium-bgp-peering-policy"
+      contents = templatefile("${path.module}/manifests/cilium/bgp-peering-policy.yaml.tpl", {
+        cilium_asn = var.cilium_asn,
+        router_ip  = var.router_ip != "" ? var.router_ip : var.network_gateway,
+        router_asn = var.router_asn,
+      })
+    }
   ]
 }
 

@@ -2,4 +2,3 @@ namespace: cilium-system
 resources:
   - base
   - high-priority-scheduling.yaml
-  - bgp-config.yaml
