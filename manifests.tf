@@ -8,6 +8,10 @@ locals {
 resource "synclocal_url" "talos_ccm_manifest" {
   url      = local.talos_ccm_manifest_url
   filename = "${path.module}/manifests/talos-ccm/talos-ccm.yaml"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 data "external" "kustomize_talos-ccm" {
@@ -27,6 +31,10 @@ resource "local_file" "cilium_kustomization" {
   content  = templatefile("${path.module}/manifests/cilium/base/kustomization.yaml.tpl", {
     cilium_version = var.cilium_version
   })
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 data "external" "kustomize_cilium" {
@@ -45,6 +53,10 @@ data "external" "kustomize_cilium" {
 resource "synclocal_url" "metrics_server_manifest" {
   url      = local.metrics_server_manifest_url
   filename = "${path.module}/manifests/metrics-server/metrics-server.yaml"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 data "external" "kustomize_metrics-server" {
@@ -58,3 +70,12 @@ data "external" "kustomize_metrics-server" {
   ]
 }
 
+# download and kustomize argocd manifests
+resource "synclocal_url" "argocd_manifest" {
+  url      = local.argocd_manifest_url
+  filename = "${path.module}/manifests/argocd/argocd.yaml"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
