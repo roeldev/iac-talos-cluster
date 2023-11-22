@@ -29,7 +29,7 @@ variable "argocd_version" {
   # https://github.com/argoproj/argo-cd/releases
   description = "ArgoCD version to use"
   type        = string
-  default     = "2.8.6"
+  default     = "2.9.2"
 }
 
 variable "metrics_server_version" {
