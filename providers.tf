@@ -10,7 +10,11 @@ terraform {
     }
     synclocal = {
       source = "justenwalker/synclocal"
-      version = "0.0.2"
+      version = ">= 0.0.2"
+    }
+    kustomization = {
+      source  = "kbst/kustomization"
+      version = ">= 0.9.4"
     }
   }
 }
@@ -20,4 +24,8 @@ provider "proxmox" {
   pm_api_token_id     = var.proxmox_api_token_id
   pm_api_token_secret = var.proxmox_api_token_secret
   pm_tls_insecure     = true
+}
+
+provider "kustomization" {
+  kubeconfig_raw = data.talos_cluster_kubeconfig.this.kubeconfig_raw
 }

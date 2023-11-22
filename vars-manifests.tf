@@ -1,7 +1,13 @@
 variable "app_of_apps" {
-  description = "Apply app of apps pattern from directory using kustomize"
-  type        = set(string)
-  default     = ["manifests/apps"]
+  description = "Apply app of apps pattern from directory using Kustomize"
+  type        = string
+  default     = "manifests/apps"
+}
+
+variable "kustomize_helm_path" {
+  description = "Path to helm binary"
+  type        = string
+  default     = "helm"
 }
 
 variable "talos_ccm_manifest_url" {
