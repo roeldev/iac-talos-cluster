@@ -22,7 +22,7 @@ variable "cilium_version" {
   # https://helm.cilium.io/
   description = "Cilium Helm version to use"
   type        = string
-  default     = "1.14.3"
+  default     = "1.14.4"
 }
 
 variable "argocd_version" {

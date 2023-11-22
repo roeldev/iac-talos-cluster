@@ -23,3 +23,6 @@ spec:
           gracefulRestart:
             enabled: true
             restartTimeSeconds: 120
+      serviceSelector:
+        matchExpressions:
+          - { key: somekey, operator: NotIn, values: [ 'never-used-value' ] }
