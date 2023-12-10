@@ -16,7 +16,7 @@ variable "talos_worker_nodes" {
       device_name  = string
       mount_point  = string
       # The size of the data disk in GiB per worker node
-      size         = string
+      size         = number
       # The name of the storage pool where the disk be stored
       storage_pool = optional(string, "")
     }))
@@ -73,6 +73,6 @@ variable "worker_node_memory" {
 
 variable "boot_disk_size" {
   description = "The size of the boot disk in GiB per node in the cluster"
-  type        = string
-  default     = "8G"
+  type        = number
+  default     = 8
 }

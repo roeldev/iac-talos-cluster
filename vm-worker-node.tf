@@ -37,7 +37,7 @@ resource "proxmox_vm_qemu" "talos-worker-node" {
 
   disk {
     type     = "virtio"
-    size     = var.boot_disk_size
+    size     = "${var.boot_disk_size}G"
     storage  = var.proxmox_servers[each.value.target_server].disk_storage_pool
     cache    = "writethrough"
     iothread = 1
@@ -49,7 +49,7 @@ resource "proxmox_vm_qemu" "talos-worker-node" {
 
     content {
       type     = "virtio"
-      size     = disk.value.size
+      size     = "${disk.value.size}G"
       storage  = disk.value.storage_pool != "" ? disk.value.storage_pool : var.proxmox_servers[each.value.target_server].disk_storage_pool
       cache    = "none"
       iothread = 1
