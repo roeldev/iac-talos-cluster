@@ -1,15 +1,15 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "telmate/proxmox"
-      version = ">= 2.9.14"
+      source  = "TheGameProfi/proxmox"
+      version = ">= 2.9.15"
     }
     talos = {
       source  = "siderolabs/talos"
       version = ">= 0.3.3"
     }
     synclocal = {
-      source = "justenwalker/synclocal"
+      source  = "justenwalker/synclocal"
       version = ">= 0.0.2"
     }
   }
