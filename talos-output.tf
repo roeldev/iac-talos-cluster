@@ -5,12 +5,6 @@ data "talos_cluster_kubeconfig" "this" {
   node                 = cidrhost(var.network_cidr, var.control_plane_first_ip)
 }
 
-resource "local_file" "export_inline-manifests" {
-  depends_on = [terraform_data.inline-manifests]
-  content    = yamlencode(terraform_data.inline-manifests.output)
-  filename   = "${path.module}/output/inline-manifests.yaml"
-}
-
 resource "local_sensitive_file" "export_talosconfig" {
   depends_on = [data.talos_client_configuration.this]
   content    = data.talos_client_configuration.this.talos_config
