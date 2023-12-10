@@ -4,12 +4,6 @@ variable "app_of_apps" {
   default     = "manifests/apps"
 }
 
-variable "kustomize_helm_path" {
-  description = "Path to helm binary"
-  type        = string
-  default     = "helm"
-}
-
 variable "talos_ccm_manifest_url" {
   description = "Talos Cloud Controller Manager manifest to use"
   type        = string
