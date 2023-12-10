@@ -2,13 +2,13 @@ variable "talos_version" {
   # https://github.com/siderolabs/talos/releases
   description = "Talos version to use"
   type        = string
-  default     = "1.5.3"
+  default     = "1.5.5"
 }
 
 variable "k8s_version" {
   description = "Kubernetes version to use"
   type        = string
-  default     = "1.28.2"
+  default     = "1.28.3"
 }
 
 variable "talos_ccm_version" {
