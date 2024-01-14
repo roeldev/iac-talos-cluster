@@ -8,6 +8,7 @@ locals {
     talos_version       = var.talos_version,
     network_gateway     = var.network_gateway,
     install_disk_device = var.install_disk_device,
+    install_image_url   = replace(var.talos_machine_install_image_url, "%", var.talos_version),
 
 #    harbor_url      = var.harbor_url,
 #    harbor_domain   = split("://", var.harbor_url)[1]

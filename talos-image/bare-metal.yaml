@@ -1,0 +1,8 @@
+# https://www.talos.dev/v1.6/talos-guides/install/boot-assets/
+customization:
+  systemExtensions:
+    # https://github.com/siderolabs/extensions
+    officialExtensions:
+#      - siderolabs/qemu-guest-agent
+      - siderolabs/iscsi-tools
+      - siderolabs/util-linux-tools

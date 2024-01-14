@@ -2,7 +2,15 @@ variable "talos_version" {
   # https://github.com/siderolabs/talos/releases
   description = "Talos version to use"
   type        = string
-  default     = "1.5.5"
+  default     = "1.6.1"
+}
+
+variable "talos_machine_install_image_url" {
+  # https://www.talos.dev/v1.6/talos-guides/install/boot-assets/
+  description = "The URL of the Talos machine install image"
+  type = string
+  # % is replaced by talos_version
+  default = "ghcr.io/siderolabs/installer:v%"
 }
 
 variable "k8s_version" {

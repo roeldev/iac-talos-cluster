@@ -22,6 +22,7 @@ machine:
 
   install:
     disk: ${install_disk_device}
+    image: ${install_image_url}
     bootloader: true
     wipe: false
 
@@ -43,13 +44,12 @@ machine:
         parameters:
           - nf_conntrack_max=131072
 
+  sysctls:
+    net.bridge.bridge-nf-call-ip6tables: "1"
+    net.bridge.bridge-nf-call-iptables: "1"
+    net.ipv4.ip_forward: "1"
+
   files:
-    - path: /etc/sysctl.d/kubernetes.conf
-      op: create
-      content: |
-        net.bridge.bridge-nf-call-ip6tables = 1
-        net.bridge.bridge-nf-call-iptables = 1
-        net.ipv4.ip_forward = 1
     - path: /var/cri/conf.d/metrics.toml
       op: create
       content: |
