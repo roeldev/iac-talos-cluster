@@ -21,11 +21,12 @@ resource "proxmox_vm_qemu" "talos-control-plane" {
   iso         = local.talos_iso_image_location
   qemu_os     = "l26" # Linux kernel type
   onboot      = true
+#  agent       = 1
 
   cpu     = "host"
   sockets = 1
   cores   = var.control_plane_cpu_cores
-  memory  = var.control_plane_memory
+  memory  = var.control_plane_memory*1024
   scsihw  = "virtio-scsi-pci"
 
   network {

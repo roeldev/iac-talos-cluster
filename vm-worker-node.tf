@@ -5,6 +5,8 @@ locals {
         index         = i
         target_server = worker.target_server
         node_labels   = merge(var.proxmox_servers[worker.target_server].node_labels, worker.node_labels)
+        cpu_cores     = worker.cpu_cores > 0 ? worker.cpu_cores : var.worker_node_cpu_cores
+        memory        = worker.memory > 0 ? worker.memory : var.worker_node_memory
         data_disks    = worker.data_disks
       }
     ]
@@ -22,11 +24,12 @@ resource "proxmox_vm_qemu" "talos-worker-node" {
   iso         = local.talos_iso_image_location
   qemu_os     = "l26" # Linux kernel type
   onboot      = true
+#  agent       = 1
 
   cpu     = "host"
   sockets = 1
-  cores   = var.worker_node_cpu_cores
-  memory  = var.worker_node_memory
+  cores   = each.value.cpu_cores
+  memory  = each.value.memory*1024
   scsihw  = "virtio-scsi-pci"
 
   network {

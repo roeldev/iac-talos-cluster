@@ -1,5 +1,3 @@
-
-
 variable "proxmox_api_token_id" {
   description = "The ID of the API token used for authentication with the Proxmox API."
   type        = string

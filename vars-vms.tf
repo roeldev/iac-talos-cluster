@@ -8,9 +8,9 @@ variable "talos_worker_nodes" {
     count         = optional(number, 1)
 
     # The amount of CPU cores to give the worker node(s)
-    cpu_cores = optional(number)
-    # The amount of memory in MiB to give the worker node(s)
-    memory    = optional(number)
+    cpu_cores = optional(number, 0)
+    # The amount of memory in GiB to give the worker node(s)
+    memory    = optional(number, 0)
 
     data_disks = list(object({
       device_name  = string
@@ -60,19 +60,19 @@ variable "worker_node_cpu_cores" {
 }
 
 variable "control_plane_memory" {
-  description = "The default amount of memory in MiB to give the control plane nodes"
+  description = "The default amount of memory (GiB) to give the control plane nodes"
   type        = number
-  default     = 4096
+  default     = 4
 }
 
 variable "worker_node_memory" {
-  description = "The default amount of memory in MiB to give the worker nodes"
+  description = "The default amount of memory (GiB) to give the worker nodes"
   type        = number
-  default     = 16384
+  default     = 16
 }
 
 variable "boot_disk_size" {
-  description = "The size of the boot disk in GiB per node in the cluster"
+  description = "The size of the boot disk (GiB) per node in the cluster"
   type        = number
   default     = 8
 }
