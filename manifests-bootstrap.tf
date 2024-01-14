@@ -22,30 +22,31 @@ resource "synclocal_url" "argocd_manifest" {
 }
 
 
-data "external" "kustomize_apps-manifests" {
+data "external" "kustomize_bootstrap-manifests" {
   depends_on = [
     data.external.talos-nodes-ready,
     synclocal_url.argocd_manifest,
   ]
-  program    = [
+  for_each = {
+    for i, m in var.bootstrap_manifests: "bootstrap-manifest-${i}" => m
+  }
+
+  program  = [
     "go",
     "run",
     "${path.module}/cmd/kustomize",
     "--",
     "--enable-helm",
-    "${path.module}/${var.app_of_apps}",
+    "-o",
+    "${path.module}/output/${each.key}.yaml",
+    "${path.module}/${each.value}",
   ]
 }
 
-resource "local_file" "export_apps-manifests" {
-  depends_on = [data.external.kustomize_apps-manifests]
-  content    = data.external.kustomize_apps-manifests.result.manifests
-  filename   = "${path.module}/output/apps-manifests.yaml"
-}
-
-resource "null_resource" "apply_apps-manifests" {
-  depends_on = [local_file.export_apps-manifests]
+resource "null_resource" "apply_bootstrap-manifests" {
+  depends_on = [data.external.kustomize_bootstrap-manifests]
+  for_each   = data.external.kustomize_bootstrap-manifests
   provisioner "local-exec" {
-    command = "kubectl apply -f ${path.module}/output/apps-manifests.yaml"
+    command = "kubectl apply -f ${path.module}/output/${each.key}.yaml"
   }
 }

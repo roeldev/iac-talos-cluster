@@ -1,7 +1,7 @@
-variable "app_of_apps" {
-  description = "Apply app of apps pattern from directory using Kustomize"
-  type        = string
-  default     = "manifests/apps"
+variable "bootstrap_manifests" {
+  description = "Bootstrap manifests from directories using Kustomize"
+  type        = list(string)
+  default     = ["manifests/apps"]
 }
 
 variable "talos_ccm_manifest_url" {
