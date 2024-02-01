@@ -8,7 +8,7 @@ import (
 	"github.com/go-pogo/errors"
 	"io"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -24,9 +24,9 @@ func main() {
 	srcPath := os.Args[1]
 	destPath := os.Args[2]
 
-	if !path.IsAbs(srcPath) {
+	if !filepath.IsAbs(srcPath) {
 		if workdir, err := os.Getwd(); err == nil {
-			srcPath = path.Clean(path.Join(workdir, srcPath))
+			srcPath = filepath.Clean(filepath.Join(workdir, srcPath))
 		}
 	}
 
@@ -38,7 +38,7 @@ func main() {
 
 	home, err := os.UserHomeDir()
 	errors.FatalOnErr(err)
-	destPath = path.Clean(path.Join(home, destPath))
+	destPath = filepath.Clean(filepath.Join(home, destPath))
 
 	src, err := os.Open(srcPath)
 	errors.FatalOnErr(err)
