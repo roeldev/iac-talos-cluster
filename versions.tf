@@ -2,7 +2,7 @@ variable "talos_version" {
   # https://github.com/siderolabs/talos/releases
   description = "Talos version to use"
   type        = string
-  default     = "1.6.3"
+  default     = "1.6.6"
 }
 
 variable "talos_machine_install_image_url" {
@@ -16,7 +16,7 @@ variable "talos_machine_install_image_url" {
 variable "k8s_version" {
   description = "Kubernetes version to use"
   type        = string
-  default     = "1.29.1"
+  default     = "1.29.2"
 }
 
 variable "talos_ccm_version" {
@@ -30,14 +30,14 @@ variable "cilium_version" {
   # https://helm.cilium.io/
   description = "Cilium Helm version to use"
   type        = string
-  default     = "1.15.0"
+  default     = "1.15.2"
 }
 
 variable "argocd_version" {
   # https://github.com/argoproj/argo-cd/releases
   description = "ArgoCD version to use"
   type        = string
-  default     = "2.9.5"
+  default     = "2.10.4"
 }
 
 variable "metrics_server_version" {
