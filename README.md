@@ -34,11 +34,11 @@ It includes a basic Kubernetes configuration to run services on the cluster, whi
 - ArgoCD installs all specified applications
 - ArgoCD keeps the applications in sync with the manifests in this repository
 
-If everything works as expected, ArgoCD should automatically install metrics-server on the freshly created kubernetes cluster.
+If everything works as expected, ArgoCD should automatically install metrics-server on the just created Kubernetes cluster.
 
 
 ## License
 
-Copyright © 2023 [Roel Schut](https://roelschut.nl). All rights reserved.
+Copyright © 2023-2024 [Roel Schut](https://roelschut.nl). All rights reserved.
 
 This project is governed by a BSD-style license that can be found in the [LICENSE](LICENSE) file.
