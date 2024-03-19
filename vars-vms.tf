@@ -11,15 +11,17 @@ variable "talos_worker_nodes" {
     cpu_cores = optional(number, 0)
     # The amount of memory in GiB to give the worker node(s)
     memory    = optional(number, 0)
+    # The size of the boot disk in GiB to give the worker node(s)
+    disk_size = optional(number, 0)
 
-    data_disks = list(object({
+    data_disks = optional(list(object({
       device_name  = string
       mount_point  = string
       # The size of the data disk in GiB per worker node
       size         = number
       # The name of the storage pool where the disk be stored
       storage_pool = optional(string, "")
-    }))
+    })), [])
   }))
 }
 
@@ -71,8 +73,14 @@ variable "worker_node_memory" {
   default     = 16
 }
 
-variable "boot_disk_size" {
-  description = "The size of the boot disk (GiB) per node in the cluster"
+variable "control_plane_disk_size" {
+  description = "The size of the boot disk (GiB) to give the control plane nodes"
   type        = number
   default     = 8
+}
+
+variable "worker_node_disk_size" {
+  description = "The default size of the boot disk (GiB) to give the worker nodes"
+  type        = number
+  default     = 16
 }

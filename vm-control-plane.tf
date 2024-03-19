@@ -37,7 +37,7 @@ resource "proxmox_vm_qemu" "talos-control-plane" {
 
   disk {
     type     = "virtio"
-    size     = "${var.boot_disk_size}G"
+    size     = "${var.control_plane_disk_size}G"
     storage  = var.proxmox_servers[each.value].disk_storage_pool
     cache    = "writethrough"
     iothread = 1
