@@ -15,10 +15,12 @@ import (
 const linuxHomePrefix = "~/"
 
 func main() {
+	errors.FatalOnErr(run())
+}
+
+func run() error {
 	if len(os.Args) < 3 {
-		errors.FatalOnErr(
-			errors.WithExitCode(errors.Errorf("Usage: %s <src> <dest>", os.Args[0]), 1),
-		)
+		return errors.WithExitCode(errors.Errorf("Usage: %s <src> <dest>", os.Args[0]), 1)
 	}
 
 	srcPath := os.Args[1]
@@ -37,19 +39,30 @@ func main() {
 	}
 
 	home, err := os.UserHomeDir()
-	errors.FatalOnErr(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
 	destPath = filepath.Clean(filepath.Join(home, destPath))
 
 	src, err := os.Open(srcPath)
-	errors.FatalOnErr(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
 	defer src.Close()
 
 	dest, err := os.Create(destPath)
-	errors.FatalOnErr(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
 	defer dest.Close()
 
 	_, err = io.Copy(dest, src)
-	errors.FatalOnErr(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
 	os.Stdout.WriteString("{}")
 	//fmt.Fprintf(os.Stdout, `{"src":"%s","dest":"%s","written":"%d"}\n`, srcPath, destPath, written)
+
+	return nil
 }

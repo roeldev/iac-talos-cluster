@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/go-pogo/errors"
@@ -19,8 +20,12 @@ type result struct {
 }
 
 func main() {
+	errors.FatalOnErr(run())
+}
+
+func run() error {
 	if len(os.Args) < 2 {
-		panic("no arguments")
+		return errors.New("no arguments")
 	}
 
 	args := []string{"kustomize"}
@@ -30,12 +35,42 @@ func main() {
 		args = append(args, os.Args[1:]...)
 	}
 
-	b, err := exec.Command("kubectl", args...).Output()
-	errors.FatalOnErr(err)
+	var buf bytes.Buffer
+	cmd := exec.Command("kubectl", args...)
+	cmd.Stderr = &buf
+
+	b, err := cmd.Output()
+	if err != nil {
+		return errors.Wrap(err, buf.String())
+	}
+
+	if i := index(args, "-o"); i > 0 {
+		b, err = os.ReadFile(args[i+1])
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
 
 	out, err := json.Marshal(result{
 		Manifests: fmt.Sprintf("# kubectl %s\n\n%s", strings.Join(args, " "), string(b)),
 	})
-	errors.FatalOnErr(err)
-	_, _ = os.Stdout.Write(out)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	_, err = os.Stdout.Write(out)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func index(list []string, item string) int {
+	for i, v := range list {
+		if v == item {
+			return i
+		}
+	}
+	return -1
 }
