@@ -3,7 +3,7 @@ module talos-cluster
 go 1.21
 
 require (
-	github.com/go-pogo/errors v0.9.0
+	github.com/go-pogo/errors v0.10.0
 	github.com/hashicorp/hcl/v2 v2.19.1
 )
 
