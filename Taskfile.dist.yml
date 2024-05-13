@@ -1,0 +1,26 @@
+# https://taskfile.dev/installation/
+version: '3'
+
+tasks:
+  init:
+    desc: Initialize the project
+    cmds:
+      - terraform init -upgrade
+      - go mod download
+
+  create:
+    desc: Create the cluster
+    cmds:
+      - terraform apply -auto-approve
+
+  destroy:
+    desc: Destroy the cluster
+    cmds:
+      - terraform destroy -target=null_resource.talos-cluster-up -auto-approve
+      - terraform destroy -auto-approve
+
+  recreate:
+    desc: Recreate the cluster
+    cmds:
+      - task destroy
+      - task create
