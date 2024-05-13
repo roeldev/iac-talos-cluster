@@ -17,11 +17,11 @@ It includes a basic Kubernetes configuration to run services on the cluster, whi
 ## Usage
 
 - Make sure all tools are installed and are set in your PATH.
-- Run `make init` to initialize the Terraform providers.
+- Run `task init` to initialize the Terraform providers.
 - Download the correct Talos release image and place it in a folder which Proxmox can access.
 - Change the `mac-to-ip_scan_subnets` variable to match to subnets on which Proxmox creates the VMs by default.
 - Optionally run `terraform plan` to see what will be created.
-- Run `make cluster` to create the VMs, boot the Talos cluster and run some basic Kubernetes services.
+- Run `task create` to create the VMs, boot the Talos cluster and run some basic Kubernetes services.
 
 
 ## How it works
