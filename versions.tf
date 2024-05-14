@@ -14,9 +14,10 @@ variable "talos_machine_install_image_url" {
 }
 
 variable "k8s_version" {
+  # https://www.talos.dev/v1.7/introduction/support-matrix/
   description = "Kubernetes version to use"
   type        = string
-  default     = "1.29.2"
+  default     = "1.30.0"
 }
 
 variable "talos_ccm_version" {
