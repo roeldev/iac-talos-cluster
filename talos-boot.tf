@@ -32,19 +32,21 @@ resource "talos_machine_configuration_apply" "control-planes" {
     data.talos_machine_configuration.cp,
     terraform_data.inline-manifests,
   ]
+  for_each = {
+    for i, x in local.vm_control_planes : i => x
+  }
 
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.cp.machine_configuration
 
-  for_each = {for i, vm in proxmox_vm_qemu.talos-control-plane : (vm.vmid - var.control_plane_first_id) => vm}
-  node     = data.external.mac-to-ip.result[each.value.network[0].macaddr]
+  node = data.external.mac-to-ip.result[macaddress.talos-control-plane[each.key].address]
 
   config_patches = [
     templatefile("${path.module}/talos-config/control-plane.yaml.tpl", {
-      topology_zone     = each.value.target_node,
+      topology_zone     = each.value,
       cluster_domain    = var.cluster_domain,
       cluster_endpoint  = local.cluster_endpoint,
-      network_interface = "enx${lower(replace(each.value.network[0].macaddr, ":", ""))}",
+      network_interface = "enx${lower(replace(macaddress.talos-control-plane[each.key].address, ":", ""))}",
       network_ip_prefix = var.network_ip_prefix,
       network_gateway   = var.network_gateway,
       hostname          = "${var.control_plane_name_prefix}-${each.key + 1}"
@@ -60,18 +62,20 @@ resource "talos_machine_configuration_apply" "worker-nodes" {
     data.external.mac-to-ip,
     data.talos_machine_configuration.wn,
   ]
+  for_each = {
+    for i, x in local.vm_worker_nodes : i => x
+  }
 
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.wn.machine_configuration
 
-  for_each = {for i, vm in proxmox_vm_qemu.talos-worker-node : (vm.vmid - var.worker_node_first_id) => vm}
-  node     = data.external.mac-to-ip.result[each.value.network[0].macaddr]
+  node = data.external.mac-to-ip.result[macaddress.talos-worker-node[each.key].address]
 
   config_patches = concat([
     templatefile("${path.module}/talos-config/worker-node.yaml.tpl", {
-      topology_zone     = each.value.target_node,
+      topology_zone     = each.value.target_server,
       cluster_domain    = var.cluster_domain,
-      network_interface = "enx${lower(replace(each.value.network[0].macaddr, ":", ""))}",
+      network_interface = "enx${lower(replace(macaddress.talos-worker-node[each.key].address, ":", ""))}",
       network_ip_prefix = var.network_ip_prefix,
       network_gateway   = var.network_gateway,
       hostname          = "${var.worker_node_name_prefix}-${each.key + 1}"
@@ -79,11 +83,11 @@ resource "talos_machine_configuration_apply" "worker-nodes" {
       ipv4_vip          = var.cluster_vip,
     }),
     templatefile("${path.module}/talos-config/node-labels.yaml.tpl", {
-      node_labels = jsonencode(local.vm_worker_nodes[each.key].node_labels),
+      node_labels = jsonencode(each.value.node_labels),
     })
   ],
     [
-      for disk in var.talos_worker_nodes[local.vm_worker_nodes[each.key].index].data_disks : templatefile(
+      for disk in var.worker_nodes[each.key].data_disks : templatefile(
       "${path.module}/talos-config/worker-node-disk.yaml.tpl",
       {
         disk_device = "/dev/${disk.device_name}",
@@ -102,3 +106,16 @@ resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = cidrhost(var.network_cidr, var.control_plane_first_ip)
 }
+
+# unfortunately, this does not really check, wait and retry for the cluster to
+# be ready but instead errors and fails when unable to connect to nodes that
+# are in the process of getting ready
+#
+# data "talos_cluster_health" "ready" {
+#   depends_on = [null_resource.talos-cluster-up]
+#
+#   client_configuration = talos_machine_secrets.this.client_configuration
+#   endpoints            = [for i, mac in macaddress.talos-control-plane : data.external.mac-to-ip.result[mac.address]]
+#   control_plane_nodes  = [for i, mac in macaddress.talos-control-plane : data.external.mac-to-ip.result[mac.address]]
+#   worker_nodes         = [for i, mac in macaddress.talos-worker-node : data.external.mac-to-ip.result[mac.address]]
+# }

@@ -26,10 +26,3 @@ variable "proxmox_servers" {
     node_labels          = optional(map(string), {})
   }))
 }
-
-variable "talos_iso_image_location" {
-  description = "The location of the Talos iso image on the Proxmox host (<storage pool>:<content type>/<file name>.iso)"
-  type        = string
-  # % is replaced by talos_version
-  default     = "nas:iso/talos-%-metal-amd64.iso"
-}

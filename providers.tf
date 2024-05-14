@@ -1,10 +1,12 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "TheGameProfi/proxmox"
-      version = ">= 2.9.15"
+      # https://registry.terraform.io/providers/bpg/proxmox/latest/docs
+      source  = "bpg/proxmox"
+      version = ">= 0.56.0"
     }
     talos = {
+      # https://registry.terraform.io/providers/siderolabs/talos/latest/docs
       source  = "siderolabs/talos"
       version = ">= 0.5.0"
     }
@@ -20,8 +22,7 @@ terraform {
 }
 
 provider "proxmox" {
-  pm_api_url          = var.proxmox_api_url
-  pm_api_token_id     = var.proxmox_api_token_id
-  pm_api_token_secret = var.proxmox_api_token_secret
-  pm_tls_insecure     = true
+  endpoint  = var.proxmox_api_url
+  api_token = "${var.proxmox_api_token_id}=${var.proxmox_api_token_secret}"
+  insecure  = true
 }

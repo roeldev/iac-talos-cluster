@@ -1,4 +1,4 @@
-variable "talos_worker_nodes" {
+variable "worker_nodes" {
   type = list(object({
     # Name of Proxmox target server on which the worker node(s) will be deployed
     target_server = string

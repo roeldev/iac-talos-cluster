@@ -42,6 +42,7 @@ func scanSubnet(cidr []string, targetMacs []string) (map[string]string, error) {
 
 		line = strings.TrimPrefix(line, foundMac)
 		line = strings.SplitN(line, " ", 2)[0]
+		line = strings.ToLower(line)
 		if hasTargets && !contains(targetMacs, line) {
 			continue
 		}

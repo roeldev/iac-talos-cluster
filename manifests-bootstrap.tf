@@ -21,7 +21,7 @@ resource "synclocal_url" "argocd_manifest" {
   filename = "${path.module}/manifests/argocd/argocd.yaml"
 }
 
-
+# prepare the bootstrap manifests and write them in the output directory
 data "external" "kustomize_bootstrap-manifests" {
   depends_on = [
     data.external.talos-nodes-ready,
@@ -47,6 +47,6 @@ resource "null_resource" "apply_bootstrap-manifests" {
   depends_on = [data.external.kustomize_bootstrap-manifests]
   for_each   = data.external.kustomize_bootstrap-manifests
   provisioner "local-exec" {
-    command = "kubectl apply -f ${path.module}/output/${each.key}.yaml"
+    command = "kubectl apply --server-side=true -f ${path.module}/output/${each.key}.yaml"
   }
 }

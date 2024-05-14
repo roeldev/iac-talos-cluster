@@ -1,6 +1,6 @@
 locals {
   vm_worker_nodes = flatten([
-    for i, worker in var.talos_worker_nodes : [
+    for i, worker in var.worker_nodes : [
       for j in range(worker.count) : {
         index         = i
         target_server = worker.target_server
@@ -14,55 +14,77 @@ locals {
   ])
 }
 
-resource "proxmox_vm_qemu" "talos-worker-node" {
+resource "macaddress" "talos-worker-node" {
+  count = length(local.vm_control_planes)
+}
+
+resource "proxmox_virtual_environment_vm" "talos-worker-node" {
+  depends_on = [
+#     proxmox_virtual_environment_file.talos-iso,
+    macaddress.talos-worker-node
+  ]
   for_each = {
     for i, x in local.vm_worker_nodes : i => x
   }
 
-  name        = "${var.worker_node_name_prefix}-${each.key + 1}"
-  vmid        = each.key + var.worker_node_first_id
-  target_node = each.value.target_server
-  iso         = local.talos_iso_image_location
-  qemu_os     = "l26" # Linux kernel type
-  onboot      = true
+  name          = "${var.worker_node_name_prefix}-${each.key + 1}"
+  vm_id         = each.key + var.worker_node_first_id
+  node_name     = each.value.target_server
+  on_boot       = true
+  scsi_hardware = "virtio-scsi-pci"
 
-  cpu     = "host"
-  sockets = 1
-  cores   = each.value.cpu_cores
-  memory  = each.value.memory*1024
-  scsihw  = "virtio-scsi-pci"
+  cdrom {
+    enabled = true
+    file_id = replace(local.talos_iso_image_location, "%", var.talos_version)
+  }
 
-  network {
-    model    = "virtio"
-    bridge   = var.proxmox_servers[each.value.target_server].network_bridge
-    firewall = false
+  cpu {
+    type    = "host"
+    sockets = 1
+    cores   = each.value.cpu_cores
+  }
+
+  memory {
+    dedicated = each.value.memory*1024
+  }
+
+  network_device {
+    enabled     = true
+    model       = "virtio"
+    bridge      = var.proxmox_servers[each.value.target_server].network_bridge
+    mac_address = macaddress.talos-worker-node[each.key].address
+    firewall    = false
+  }
+
+  operating_system {
+    type = "l26" # Linux kernel type
   }
 
   disk {
-    type     = "virtio"
-    size     = "${each.value.disk_size}G"
-    storage  = var.proxmox_servers[each.value.target_server].disk_storage_pool
-    cache    = "writethrough"
-    iothread = 1
-    backup   = false
+    interface    = "virtio0"
+    size         = each.value.disk_size
+    datastore_id = var.proxmox_servers[each.value.target_server].disk_storage_pool
+    file_format  = "raw"
+    cache        = "writethrough"
+    iothread     = true
+    backup       = false
   }
 
   dynamic "disk" {
-    for_each = var.talos_worker_nodes[each.value.index].data_disks
+    for_each = var.worker_nodes[each.value.index].data_disks
 
     content {
-      type     = "virtio"
-      size     = "${disk.value.size}G"
-      storage  = disk.value.storage_pool != "" ? disk.value.storage_pool : var.proxmox_servers[each.value.target_server].disk_storage_pool
-      cache    = "none"
-      iothread = 1
-      backup   = false
+      interface    = "virtio${each.value.index+1}"
+      size         = disk.value.size
+      datastore_id = disk.value.storage_pool != "" ? disk.value.storage_pool : var.proxmox_servers[each.value.target_server].disk_storage_pool
+      file_format  = "raw"
+      cache        = "none"
+      iothread     = true
+      backup       = false
     }
   }
 }
 
 output "talos_worker_node_mac_addrs" {
-  value = {
-    for i, cfg in proxmox_vm_qemu.talos-worker-node : cfg.vmid => cfg.network[0].macaddr
-  }
+  value = macaddress.talos-worker-node
 }
