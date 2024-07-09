@@ -15,7 +15,7 @@ locals {
 }
 
 resource "macaddress" "talos-worker-node" {
-  count = length(local.vm_control_planes)
+  count = length(local.vm_worker_nodes)
 }
 
 resource "proxmox_virtual_environment_vm" "talos-worker-node" {

@@ -87,7 +87,7 @@ resource "talos_machine_configuration_apply" "worker-nodes" {
     })
   ],
     [
-      for disk in var.worker_nodes[each.key].data_disks : templatefile(
+      for disk in each.value.data_disks : templatefile(
       "${path.module}/talos-config/worker-node-disk.yaml.tpl",
       {
         disk_device = "/dev/${disk.device_name}",
