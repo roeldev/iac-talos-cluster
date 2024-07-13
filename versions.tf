@@ -2,7 +2,7 @@ variable "talos_version" {
   # https://github.com/siderolabs/talos/releases
   description = "Talos version to use"
   type        = string
-  default     = "1.7.1"
+  default     = "1.7.5"
 }
 
 variable "talos_machine_install_image_url" {
