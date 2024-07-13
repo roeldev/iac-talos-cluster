@@ -33,6 +33,19 @@ resource "proxmox_virtual_environment_vm" "talos-worker-node" {
   on_boot       = true
   scsi_hardware = "virtio-scsi-pci"
 
+  agent {
+    enabled = true
+  }
+
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "${cidrhost(var.network_cidr, each.key + var.worker_node_first_ip)}/${split("/", var.network_cidr)[1]}"
+        gateway = var.network_gateway
+      }
+    }
+  }
+
   cdrom {
     enabled = true
     file_id = replace(local.talos_iso_image_location, "%", var.talos_version)

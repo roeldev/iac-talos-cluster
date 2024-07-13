@@ -6,11 +6,12 @@ variable "talos_version" {
 }
 
 variable "talos_machine_install_image_url" {
-  # https://www.talos.dev/v1.6/talos-guides/install/boot-assets/
+  # https://www.talos.dev/v1.7/talos-guides/install/boot-assets/
   description = "The URL of the Talos machine install image"
   type = string
   # % is replaced by talos_version
-  default = "ghcr.io/siderolabs/installer:v%"
+  default = "factory.talos.dev/installer/88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b:v%"
+# default = "ghcr.io/siderolabs/installer:v%" // = default, when not using system extensions
 }
 
 variable "k8s_version" {
@@ -21,7 +22,7 @@ variable "k8s_version" {
 }
 
 variable "talos_ccm_version" {
-  # https://github.com/sdefinitelyiderolabs/talos-cloud-controller-manager/releases
+  # https://github.com/siderolabs/talos-cloud-controller-manager/releases
   description = "Talos Cloud Controller Manager version to use"
   type        = string
   default     = "1.6.0"

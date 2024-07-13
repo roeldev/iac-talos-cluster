@@ -43,6 +43,19 @@ resource "proxmox_virtual_environment_vm" "talos-control-plane" {
   on_boot       = true
   scsi_hardware = "virtio-scsi-pci"
 
+  agent {
+    enabled = true
+  }
+
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "${cidrhost(var.network_cidr, each.key + var.control_plane_first_ip)}/${split("/", var.network_cidr)[1]}"
+        gateway = var.network_gateway
+      }
+    }
+  }
+
   cdrom {
     enabled = true
     file_id =  replace(local.talos_iso_image_location, "%", var.talos_version)
